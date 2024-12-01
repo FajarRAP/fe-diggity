@@ -13,6 +13,7 @@ import Constants from '@/common/constants'
 import ServiceTypeCardItem from '@/components/cards/ServiceTypeCardItem.vue'
 import ContactUs from '@/components/ContactUs.vue'
 import Footer from '@/components/Footer.vue'
+import WrapperBottomBreadcumb from '@/components/wrappers/WrapperBottomBreadcumb.vue'
 </script>
 
 <template>
@@ -62,6 +63,12 @@ import Footer from '@/components/Footer.vue'
   </WrapperTransparent>
 
   <ContactUs />
+
+  <WrapperBottomBreadcumb>
+    <Breadcumb>
+      <BreadcumbLink text="Layanan" />
+    </Breadcumb>
+  </WrapperBottomBreadcumb>
 
   <Footer />
 </template>
