@@ -2,10 +2,20 @@
 import HeadingSix from '../fonts/HeadingSix.vue'
 import Arrow from './Arrow.vue'
 
-defineProps({ text: String })
+interface Props {
+  text?: string
+  link?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  link: '#'
+
+})
 </script>
 
 <template>
   <Arrow />
-  <HeadingSix class="text-secondary" :text="text" />
+  <RouterLink :to="`${link}`">
+    <HeadingSix class="text-secondary" :text="text" />
+  </RouterLink>
 </template>

@@ -3,5 +3,5 @@ defineProps({ text: String })
 </script>
 
 <template>
-  <h1 class="font-semibold font-inter xl:text-4xl lg:text-3xl">{{ text }}</h1>
+  <p class="font-inter xl:text-xs lg:text-xxs">{{ text }}</p>
 </template>

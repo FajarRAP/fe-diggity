@@ -19,6 +19,12 @@ export default {
         accent: '#00BE5F',
         border: '#6C849D',
       },
+      fontSize: {
+        xxs: ['10px', '12px'],
+      },
+      fontFamily: {
+        inter: 'Inter',
+      },
     },
   },
   plugins: [],

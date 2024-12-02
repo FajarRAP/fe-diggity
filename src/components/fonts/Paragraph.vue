@@ -3,5 +3,5 @@ defineProps({ text: String })
 </script>
 
 <template>
-  <p class="xl:text-base lg:text-sm">{{ text }}</p>
+  <p class="xl:text-base lg:text-sm font-inter">{{ text }}</p>
 </template>

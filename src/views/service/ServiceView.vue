@@ -14,6 +14,7 @@ import ServiceTypeCardItem from '@/components/cards/ServiceTypeCardItem.vue'
 import ContactUs from '@/components/ContactUs.vue'
 import Footer from '@/components/Footer.vue'
 import WrapperBottomBreadcumb from '@/components/wrappers/WrapperBottomBreadcumb.vue'
+import RoutesName from '@/router/routes'
 </script>
 
 <template>
@@ -21,12 +22,11 @@ import WrapperBottomBreadcumb from '@/components/wrappers/WrapperBottomBreadcumb
     <Breadcumb>
       <BreadcumbLink text="Layanan" />
     </Breadcumb>
-    <div class="grid grid-cols-2 xl:gap-24 lg:gap-16 items-center">
+    <div class="grid items-center grid-cols-2 xl:gap-24 lg:gap-16">
       <div class="xl:space-y-12 lg:space-y-8">
         <HeadingOne text="Layanan" />
         <Paragraph
-          text="Diggity menyediakan beragam layanan terbaik yang dirancang khusus untuk memenuhi kebutuhan teknologi dan digitalisasi produk Anda. Kami mengakui bahwa setiap produk memiliki karakteristik uniknya sendiri. Oleh karena itu, jangan sungkan untuk menghubungi kami dan berkonsultasi tentang produk Anda."
-        />
+          text="Diggity menyediakan beragam layanan terbaik yang dirancang khusus untuk memenuhi kebutuhan teknologi dan digitalisasi produk Anda. Kami mengakui bahwa setiap produk memiliki karakteristik uniknya sendiri. Oleh karena itu, jangan sungkan untuk menghubungi kami dan berkonsultasi tentang produk Anda." />
         <PrimaryButton text="Hubungi Kami" />
       </div>
       <img :src="HomeImage" alt="heading image" class="rounded-2xl" />
@@ -37,7 +37,9 @@ import WrapperBottomBreadcumb from '@/components/wrappers/WrapperBottomBreadcumb
     <HeadingTwo text="Layanan yang Kami Sediakan" />
     <div class="xl:space-y-12 lg:space-y-8">
       <template v-for="e in Constants.serviceCards">
-        <ServiceCardItem :title="e.title" :description="e.description" :img="e.img" />
+        <RouterLink :to="`${RoutesName.serviceRoute}/${e.slug}`" class="block">
+          <ServiceCardItem :title="e.title" :description="e.description" :img="e.img" />
+        </RouterLink>
       </template>
     </div>
   </WrapperTransparent>
@@ -52,12 +54,10 @@ import WrapperBottomBreadcumb from '@/components/wrappers/WrapperBottomBreadcumb
     <HeadingTwo text="Model Kerja Sama" />
     <div class="grid grid-cols-3 xl:gap-7 lg:gap-5">
       <template v-for="e in Constants.ServiceTypeCards">
-        <ServiceTypeCardItem
-          :title="e.title"
-          :description="e.description"
-          :benefits="e.benefits"
-          :img="HomeImage"
-        />
+        <RouterLink :to="`${RoutesName.serviceTypeRoute}/${e.slug}`">
+          <ServiceTypeCardItem class="h-full" :title="e.title" :description="e.description" :benefits="e.benefits"
+            :img="HomeImage" />
+        </RouterLink>
       </template>
     </div>
   </WrapperTransparent>
