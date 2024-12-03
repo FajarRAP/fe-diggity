@@ -5,9 +5,11 @@ export default {
   theme: {
     boxShadow: {
       card: '0 2px 16px 0 rgba(25, 40, 57, 0.09)',
+      navbar: '0 -2px 12px 0 rgba(0, 0, 0, 0.25)',
     },
     extend: {
       colors: {
+        background: '#F5F8FF',
         inversePrimary: '#D8E4FD',
         primary: '#305EFF',
         secondary: '#1B3591',

@@ -33,3 +33,6 @@ coverage
 *.png
 *.jpg
 *.jpeg
+
+# Environment
+*.env
