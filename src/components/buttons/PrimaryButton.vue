@@ -5,7 +5,8 @@ defineProps({ text: String })
 </script>
 
 <template>
-  <button class="bg-primary rounded xl:py-3 lg:py-2 xl:px-5 lg:px-3 text-onPrimary">
+  <button
+    class="rounded bg-primary xl:py-3 lg:py-2 xl:px-5 lg:px-3 text-onPrimary focus:outline-primary focus:outline-offset-4">
     <HeadingSix :text="text" />
   </button>
 </template>

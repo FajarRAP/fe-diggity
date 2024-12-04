@@ -16,7 +16,7 @@ import Footer from '@/components/Footer.vue'
 import WrapperBottomBreadcumb from '@/components/wrappers/WrapperBottomBreadcumb.vue'
 import RoutesName from '@/router/routes'
 
-const click = () => console.log(import.meta.env.VITE_API_URL)
+const click = () => console.log(sessionStorage.getItem('token'))
 
 </script>
 
@@ -40,7 +40,7 @@ const click = () => console.log(import.meta.env.VITE_API_URL)
     <HeadingTwo text="Layanan yang Kami Sediakan" />
     <div class="xl:space-y-12 lg:space-y-8">
       <template v-for="e in Constants.serviceCards">
-        <RouterLink :to="`${RoutesName.serviceRoute}${e.slug}`" class="block">
+        <RouterLink :to="`${RoutesName.serviceRoute}service/${e.slug}`" class="block">
           <ServiceCardItem :title="e.title" :description="e.description" :img="e.img" />
         </RouterLink>
       </template>

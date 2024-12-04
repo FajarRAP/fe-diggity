@@ -6,37 +6,6 @@ import HeadingSix from '@/components/fonts/HeadingSix.vue';
 import HeadingTwo from '@/components/fonts/HeadingTwo.vue';
 import Paragraph from '@/components/fonts/Paragraph.vue';
 import RoutesName from '@/router/routes';
-import { useAuthStore } from '@/stores/auth_store';
-import { ref, type Ref } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter()
-const email: Ref<string> = ref('');
-const password: Ref<string> = ref('');
-const authStore = useAuthStore();
-
-const signIn = async (email: string, password: string) => {
-
-
-  const response = await fetch(`${import.meta.env.VITE_API_URL}v1/auth/login`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ email: email, password: password }),
-  });
-
-
-  if (!response.ok) return;
-
-  const json = await response.json()
-  router.push({ path: RoutesName.serviceRoute });
-  sessionStorage.setItem('token', json.access_token);
-  sessionStorage.setItem('user', JSON.stringify(json.data));
-  authStore.checkIsLoggedIn();
-}
-
 </script>
 
 <template>
@@ -50,16 +19,24 @@ const signIn = async (email: string, password: string) => {
           <HeadingOne text="Account" />
         </div>
       </div>
-      <HeadingOne text="Sign In" />
+      <HeadingOne text="Sign Up" />
       <Paragraph text="Lengkapi form di bawah dengan menggunakan data Anda yang valid" class="xl:mb-6 lg:mb-4" />
       <Card class="xl:space-y-6 lg:space-y-4">
+        <div>
+          <label for="username">
+            <Paragraph text="Username" class="mb-1.5 font-semibold" />
+          </label>
+          <input type="text"
+            class="w-full px-3 py-2 border border-gray-400 rounded focus:border-primary focus:ring-primary focus:outline-primary"
+            id="username" placeholder="Username">
+        </div>
         <div>
           <label for="email">
             <Paragraph text="Email" class="mb-1.5 font-semibold" />
           </label>
           <input type="email"
             class="w-full px-3 py-2 border border-gray-400 rounded focus:border-primary focus:ring-primary focus:outline-primary"
-            id="email" placeholder="Email" v-model="email">
+            id="email" placeholder="Email">
         </div>
         <div>
           <label for="password">
@@ -67,13 +44,21 @@ const signIn = async (email: string, password: string) => {
           </label>
           <input type="password"
             class="w-full px-3 py-2 border border-gray-400 rounded focus:border-primary focus:ring-primary focus:outline-primary"
-            placeholder="Password" v-model="password">
+            id="password" placeholder="Password">
         </div>
-        <PrimaryButton text="Sign In" class="w-full" @click="signIn(email, password)" />
+        <div>
+          <label for="confirm_password">
+            <Paragraph text="Confirm Password" class="font-semibold mb-1.5" />
+          </label>
+          <input type="password"
+            class="w-full px-3 py-2 border border-gray-400 rounded focus:border-primary focus:ring-primary focus:outline-primary"
+            id="confirm_password" placeholder="Confirm Password">
+        </div>
+        <PrimaryButton text="Sign In" class="w-full" />
         <span class="block text-center">
           <Paragraph text="Belum punya akun?" class="inline" />
-          <RouterLink :to="RoutesName.signUpRoute">
-            <HeadingSix text=" Sign Up" class="inline text-primary" />
+          <RouterLink :to="RoutesName.signInRoute">
+            <HeadingSix text=" Sign In" class="inline text-primary" />
           </RouterLink>
         </span>
       </Card>
