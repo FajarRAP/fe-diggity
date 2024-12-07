@@ -1,5 +1,9 @@
-import { ref, type Ref } from 'vue'
-import { defineStore } from 'pinia'
+import { computed, ref, type Ref } from 'vue'
+import { defineStore, type StoreDefinition } from 'pinia'
+import { useRouter } from 'vue-router'
+import { Axios } from 'axios'
+import axiosInstance from '@/common/axios'
+import RoutesName from '@/router/routes'
 
 export class User {
   email: string
@@ -19,10 +23,71 @@ export class User {
 }
 
 export const useAuthStore = defineStore('auth', () => {
+  const router = useRouter()
   const plainUser: string | null = sessionStorage.getItem('user')
   const isLoggedIn: Ref<boolean> = ref(sessionStorage.getItem('token') !== null)
   const user: Ref<User | null> = ref(plainUser ? User.fromJson(plainUser) : null)
-  const checkIsLoggedIn = () => (isLoggedIn.value = sessionStorage.getItem('token') !== null)
+  const checkIsLoggedIn = (): boolean =>
+    (isLoggedIn.value = sessionStorage.getItem('token') !== null)
 
-  return { isLoggedIn, user, checkIsLoggedIn }
+  const signIn = async (email: string, password: string, rememberMe: boolean): Promise<void> => {
+    try {
+      const response = await axiosInstance.post('v1/auth/login', {
+        email: email,
+        password: password,
+        remember_me: rememberMe,
+      })
+
+      router.push({ path: RoutesName.serviceRoute })
+      sessionStorage.setItem('token', response.data.access_token)
+      sessionStorage.setItem('user', JSON.stringify(response.data.data))
+      checkIsLoggedIn()
+    } catch (error) {
+      console.log(`sign in: ${error}`)
+    }
+  }
+
+  const signOut = async (): Promise<void> => {
+    try {
+      await axiosInstance.post(`v1/auth/logout`)
+      sessionStorage.clear()
+      checkIsLoggedIn()
+    } catch (error) {
+      console.log(`sign out : ${error}`)
+    }
+  }
+
+  const forgotPassword = async (email: string): Promise<void> => {
+    try {
+      const response = await axiosInstance.post('v1/auth/forgot-password', {
+        email: email,
+      })
+      console.log(response.data)
+      console.log(response.status)
+    } catch (error) {
+      console.log(`forgot password : ${error}`)
+    }
+  }
+
+  const resetPassword = async (
+    email: string,
+    password: string,
+    confirmPassword: string,
+    resetToken: string,
+  ): Promise<void> => {
+    try {
+      const response = await axiosInstance.post(`v1/auth/reset-password/${resetToken}`, {
+        email: email,
+        password: password,
+        password_confirmation: confirmPassword,
+        token: resetToken,
+      })
+      console.log(response.data)
+      console.log(response.status)
+    } catch (error) {
+      console.log(`forgot password : ${error}`)
+    }
+  }
+
+  return { isLoggedIn, user, checkIsLoggedIn, signIn, signOut, forgotPassword, resetPassword }
 })
