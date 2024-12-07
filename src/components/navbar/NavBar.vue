@@ -3,25 +3,10 @@ import RoutesName from '@/router/routes';
 import PrimaryButton from '../buttons/PrimaryButton.vue';
 import PrimaryOutlineButton from '../buttons/PrimaryOutlineButton.vue';
 import HeadingTwo from '../fonts/HeadingTwo.vue';
-import { useAuthStore, User } from '@/stores/auth_store';
-import { onMounted } from 'vue';
+import { useAuthStore } from '@/stores/auth_store';
 
 const authStore = useAuthStore();
 
-const signOut = async () => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}v1/auth/logout`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-    }
-  });
-
-  if (!response.ok) return;
-  sessionStorage.clear();
-  authStore.checkIsLoggedIn();
-}
 </script>
 
 <template>
@@ -39,7 +24,7 @@ const signOut = async () => {
       </RouterLink>
     </div>
     <div class="ms-auto xl:space-x-6 lg:space-x-4" v-if="authStore.isLoggedIn">
-      <PrimaryButton text="Sign Out" @click="signOut" />
+      <PrimaryButton text="Sign Out" @click="authStore.signOut" />
     </div>
   </div>
 </template>
