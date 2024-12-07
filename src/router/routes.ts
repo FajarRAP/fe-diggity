@@ -4,4 +4,6 @@ export default class RoutesName {
   static signInRoute: string = '/sign-in'
   static signUpRoute: string = '/sign-up'
   static signOutRoute: string = '/sign-out'
+  static forgotPasswordRoute: string = '/forgot-password'
+  static resetPasswordRoute: string = '/reset-password'
 }
