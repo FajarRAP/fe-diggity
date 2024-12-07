@@ -27,7 +27,10 @@ export default {
       fontFamily: {
         inter: 'Inter',
       },
+      width: {
+        lg: '32rem',
+      },
     },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/forms')],
 }
