@@ -1,22 +1,20 @@
 <script setup lang="ts">
 import Breadcumb from '@/components/breadcumb/Breadcumb.vue'
 import BreadcumbLink from '@/components/breadcumb/BreadcumbLink.vue'
-import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
-import HeadingOne from '@/components/fonts/HeadingOne.vue'
-import HeadingTwo from '@/components/fonts/HeadingTwo.vue'
-import Paragraph from '@/components/fonts/Paragraph.vue'
-import WrapperInversePrimary from '@/components/wrappers/WrapperInversePrimary.vue'
-import WrapperTransparent from '@/components/wrappers/WrapperTransparent.vue'
-import HomeImage from '@/assets/images/image.png'
-import ServiceCardItem from '@/components/cards/ServiceCardItem.vue'
 import Constants from '@/common/constants'
-import ServiceTypeCardItem from '@/components/cards/ServiceTypeCardItem.vue'
 import ContactUs from '@/components/ContactUs.vue'
 import Footer from '@/components/Footer.vue'
-import WrapperBottomBreadcumb from '@/components/wrappers/WrapperBottomBreadcumb.vue'
+import HeadingOne from '@/components/fonts/HeadingOne.vue'
+import HeadingTwo from '@/components/fonts/HeadingTwo.vue'
+import HomeImage from '@/assets/images/image.png'
+import Paragraph from '@/components/fonts/Paragraph.vue'
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue'
 import RoutesName from '@/router/routes'
-
-const click = () => console.log(sessionStorage.getItem('token'))
+import ServiceCardItem from '@/components/cards/ServiceCardItem.vue'
+import ServiceTypeCardItem from '@/components/cards/ServiceTypeCardItem.vue'
+import WrapperBottomBreadcumb from '@/components/wrappers/WrapperBottomBreadcumb.vue'
+import WrapperInversePrimary from '@/components/wrappers/WrapperInversePrimary.vue'
+import WrapperTransparent from '@/components/wrappers/WrapperTransparent.vue'
 
 </script>
 
@@ -30,7 +28,7 @@ const click = () => console.log(sessionStorage.getItem('token'))
         <HeadingOne text="Layanan" />
         <Paragraph
           text="Diggity menyediakan beragam layanan terbaik yang dirancang khusus untuk memenuhi kebutuhan teknologi dan digitalisasi produk Anda. Kami mengakui bahwa setiap produk memiliki karakteristik uniknya sendiri. Oleh karena itu, jangan sungkan untuk menghubungi kami dan berkonsultasi tentang produk Anda." />
-        <PrimaryButton text="Hubungi Kami" @click="click" />
+        <PrimaryButton text="Hubungi Kami" />
       </div>
       <img :src="HomeImage" alt="heading image" class="rounded-2xl" />
     </div>
