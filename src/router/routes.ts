@@ -6,4 +6,5 @@ export default class RoutesName {
   static signOutRoute: string = '/sign-out'
   static forgotPasswordRoute: string = '/forgot-password'
   static resetPasswordRoute: string = '/reset-password'
+  static dashboardAdminRoute: string = '/dashboard/admin'
 }

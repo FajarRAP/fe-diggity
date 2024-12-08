@@ -5,8 +5,7 @@ import PrimaryOutlineButton from '../buttons/PrimaryOutlineButton.vue';
 import HeadingTwo from '../fonts/HeadingTwo.vue';
 import { useAuthStore } from '@/stores/auth_store';
 
-const authStore = useAuthStore();
-
+const authStore = useAuthStore()
 </script>
 
 <template>
@@ -24,6 +23,9 @@ const authStore = useAuthStore();
       </RouterLink>
     </div>
     <div class="ms-auto xl:space-x-6 lg:space-x-4" v-if="authStore.isLoggedIn">
+      <RouterLink :to="RoutesName.dashboardAdminRoute">
+        <PrimaryOutlineButton text="Dashboard" />
+      </RouterLink>
       <PrimaryButton text="Sign Out" @click="authStore.signOut" />
     </div>
   </div>

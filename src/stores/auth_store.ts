@@ -1,9 +1,10 @@
-import { computed, ref, type Ref } from 'vue'
+import { computed, reactive, ref, type Ref } from 'vue'
 import { defineStore, type StoreDefinition } from 'pinia'
 import { useRouter } from 'vue-router'
-import { Axios } from 'axios'
+import { Axios, AxiosError } from 'axios'
 import axiosInstance from '@/common/axios'
 import RoutesName from '@/router/routes'
+import { errorToast, successToast } from '@/common/helpers'
 
 export class User {
   email: string
@@ -38,23 +39,20 @@ export const useAuthStore = defineStore('auth', () => {
         remember_me: rememberMe,
       })
 
-      router.push({ path: RoutesName.serviceRoute })
       sessionStorage.setItem('token', response.data.access_token)
       sessionStorage.setItem('user', JSON.stringify(response.data.data))
       checkIsLoggedIn()
-    } catch (error) {
-      console.log(`sign in: ${error}`)
-    }
+
+      router.push({ path: RoutesName.dashboardAdminRoute })
+    } catch (error) {}
   }
 
   const signOut = async (): Promise<void> => {
     try {
-      await axiosInstance.post(`v1/auth/logout`)
+      const response = await axiosInstance.post(`v1/auth/logout`)
       sessionStorage.clear()
       checkIsLoggedIn()
-    } catch (error) {
-      console.log(`sign out : ${error}`)
-    }
+    } catch (error) {}
   }
 
   const forgotPassword = async (email: string): Promise<void> => {
@@ -89,5 +87,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { isLoggedIn, user, checkIsLoggedIn, signIn, signOut, forgotPassword, resetPassword }
+  return {
+    isLoggedIn,
+    user,
+    checkIsLoggedIn,
+    signIn,
+    signOut,
+    forgotPassword,
+    resetPassword,
+  }
 })
