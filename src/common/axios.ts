@@ -1,5 +1,5 @@
-import RoutesName from '@/router/routes'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
+import { errorToast, successToast } from './helpers'
 
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
@@ -17,8 +17,27 @@ axiosInstance.interceptors.request.use(
     }
     return config
   },
+  (error) => Promise.reject(error),
+)
+
+axiosInstance.interceptors.response.use(
+  (response) => {
+    switch (response.status) {
+      case 200:
+      case 201:
+        successToast(response.data.message)
+        break
+      case 401:
+        sessionStorage.clear()
+    }
+    return response
+  },
   (error) => {
+    if (error instanceof AxiosError) {
+      errorToast(error.response?.data.error)
+    }
     return Promise.reject(error)
   },
 )
+
 export default axiosInstance
