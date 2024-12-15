@@ -9,10 +9,18 @@ import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue'
 import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
 import DashboardAdminView from '@/views/admin/DashboardAdminView.vue'
 import { useAuthStore } from '@/stores/auth_store'
+import ContactUsService from '@/views/service/ContactUsServiceView.vue'
+import FirstForm from '@/components/contact-us/service/FirstForm.vue'
+import SecondForm from '@/components/contact-us/service/SecondForm.vue'
+import ThirdForm from '@/components/contact-us/service/ThirdForm.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/:pathMatch(.*)*',
+      component: ServiceView,
+    },
     {
       path: RoutesName.serviceRoute,
       component: ServiceView,
@@ -51,6 +59,10 @@ const router = createRouter({
     {
       path: RoutesName.dashboardAdminRoute,
       component: DashboardAdminView,
+    },
+    {
+      path: RoutesName.contactUsServiceRoute,
+      component: ContactUsService,
     },
   ],
 })

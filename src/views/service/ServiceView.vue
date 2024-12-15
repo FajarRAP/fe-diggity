@@ -28,7 +28,9 @@ import WrapperTransparent from '@/components/wrappers/WrapperTransparent.vue'
         <HeadingOne text="Layanan" />
         <Paragraph
           text="Diggity menyediakan beragam layanan terbaik yang dirancang khusus untuk memenuhi kebutuhan teknologi dan digitalisasi produk Anda. Kami mengakui bahwa setiap produk memiliki karakteristik uniknya sendiri. Oleh karena itu, jangan sungkan untuk menghubungi kami dan berkonsultasi tentang produk Anda." />
-        <PrimaryButton text="Hubungi Kami" />
+        <RouterLink :to="RoutesName.contactUsServiceRoute" class="block">
+          <PrimaryButton text="Hubungi Kami" />
+        </RouterLink>
       </div>
       <img :src="HomeImage" alt="heading image" class="rounded-2xl" />
     </div>
@@ -48,7 +50,9 @@ import WrapperTransparent from '@/components/wrappers/WrapperTransparent.vue'
   <WrapperInversePrimary class="text-center">
     <HeadingTwo text="Tidak Menemukan Solusi yang Sesuai Kebutuhan Anda?" />
     <Paragraph text="Tim kami siap memberikan bantuan dengan senang hati" />
-    <PrimaryButton text="Hubungi Kami" />
+    <RouterLink :to="`${RoutesName.contactUsServiceRoute}/page/1`" class="block">
+      <PrimaryButton text="Hubungi Kami" />
+    </RouterLink>
   </WrapperInversePrimary>
 
   <WrapperTransparent>

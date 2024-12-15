@@ -1,6 +1,7 @@
 export default class RoutesName {
   static serviceRoute: string = '/'
   static serviceTypeRoute: string = `${this.serviceRoute}service/type`
+  static contactUsServiceRoute: string = `${this.serviceRoute}contact-us-service`
   static signInRoute: string = '/sign-in'
   static signUpRoute: string = '/sign-up'
   static signOutRoute: string = '/sign-out'
