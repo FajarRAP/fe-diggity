@@ -3,23 +3,35 @@ import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import PrimaryOutlineButton from '@/components/buttons/PrimaryOutlineButton.vue';
 import HeadingSix from '@/components/fonts/HeadingSix.vue';
 import Paragraph from '@/components/fonts/Paragraph.vue';
+import { Collaboration, Service, useServiceStore } from '@/stores/service_store';
+import { defineAsyncComponent, onMounted, ref, type Ref } from 'vue';
 
-defineEmits<{
+const emit = defineEmits<{
   prev: void,
   next: void,
 }>()
 
+const serviceStore = useServiceStore()
+
+const services: Ref<Array<Service>> = ref([])
+const collaborations: Ref<Array<Collaboration>> = ref([])
+
+onMounted(async () => {
+  services.value = await serviceStore.fetchServices();
+  collaborations.value = await serviceStore.fetchCollaborations();
+})
 </script>
 
 <template>
+
   <div class="flex flex-col mx-auto text-left xl:w-1/2 lg:w-3/4 xl:gap-12 lg:gap-8">
     <div>
       <HeadingSix text="Layanan yang Dibutuhkan" class="mb-1.5" />
       <div class="grid grid-cols-3 gap-2">
-        <div class="flex items-center gap-2" v-for="(e, i) in 9">
-          <input type="radio" :id="`website-development-${i}`" :value="`website-development-${i}`">
-          <label :for="`website-development-${i}`">
-            <Paragraph text="Website Development" />
+        <div class="flex items-center gap-2" v-for="(e, i) in services">
+          <input type="radio" :id="e.id" :value="e.name">
+          <label :for="e.id">
+            <Paragraph :text="e.name" />
           </label>
         </div>
       </div>
@@ -27,10 +39,10 @@ defineEmits<{
     <div>
       <HeadingSix text="Model Kerjasama yang Diinginkan" class="mb-1.5" />
       <div class="space-y-2">
-        <div class="flex items-center gap-2" v-for="(e, i) in 3">
-          <input type="radio" :id="`dedicated-team-${i}`" :value="`dedicated-team${i}`">
-          <label :for="`dedicated-team-${i}`">
-            <Paragraph text="Dedicated Team" />
+        <div class="flex items-center gap-2" v-for="(e, i) in collaborations">
+          <input type="radio" :id="e.id" :value="e.type">
+          <label :for="e.id">
+            <Paragraph :text="e.type" />
           </label>
         </div>
       </div>
