@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import type { Budget, Collaboration, Schedule, Service } from '@/common/models';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import PrimaryOutlineButton from '@/components/buttons/PrimaryOutlineButton.vue';
 import HeadingSix from '@/components/fonts/HeadingSix.vue';
 import Paragraph from '@/components/fonts/Paragraph.vue';
-import { Budget, Collaboration, Schedule, Service, useServiceStore } from '@/stores/service_store';
+import {  useServiceStore } from '@/stores/service_store';
 import { onMounted, ref, type Ref } from 'vue';
 
 defineEmits<{
@@ -36,7 +37,6 @@ const budget: Ref<string> = ref('')
   <div class="flex flex-col mx-auto text-left xl:w-1/2 lg:w-3/4 xl:gap-12 lg:gap-8">
     <div>
       <HeadingSix text="Layanan yang Dibutuhkan" class="mb-1.5" />
-
       <div class="grid grid-cols-3 gap-2">
         <div class="flex items-center gap-2" v-for="e in services">
           <input type="radio" :id="`service-${e.id}`" :value="e.id" v-model="service">

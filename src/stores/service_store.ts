@@ -1,62 +1,17 @@
 import axiosInstance from '@/common/axios'
+import {
+  Budget,
+  BusinessDuration,
+  Collaboration,
+  Employee,
+  Regency,
+  Region,
+  Schedule,
+  Service,
+  ServiceOrderParams,
+} from '@/common/models'
 import type { AxiosResponse } from 'axios'
 import { defineStore } from 'pinia'
-
-export class Service {
-  id: string
-  name: string
-
-  constructor(id: string, name: string) {
-    this.id = id
-    this.name = name
-  }
-
-  static fromJson(plainJson: any) {
-    return new Service(plainJson.id, plainJson.name)
-  }
-}
-
-export class Collaboration {
-  id: string
-  type: string
-
-  constructor(id: string, type: string) {
-    this.id = id
-    this.type = type
-  }
-
-  static fromJson(plainJson: any) {
-    return new Collaboration(plainJson.id, plainJson.type)
-  }
-}
-
-export class Schedule {
-  id: string
-  schedule: string
-
-  constructor(id: string, schedule: string) {
-    this.id = id
-    this.schedule = schedule
-  }
-
-  static fromJson(plainJson: any) {
-    return new Schedule(plainJson.id, plainJson.schedule)
-  }
-}
-
-export class Budget {
-  id: string
-  budget: string
-
-  constructor(id: string, budget: string) {
-    this.id = id
-    this.budget = budget
-  }
-
-  static fromJson(plainJson: any) {
-    return new Budget(plainJson.id, plainJson.amount)
-  }
-}
 
 export const useServiceStore = defineStore('service', () => {
   async function fetchServices(): Promise<Array<Service>> {
@@ -75,7 +30,6 @@ export const useServiceStore = defineStore('service', () => {
       const datas: Array<Collaboration> = response.data.data.map((e: any) =>
         Collaboration.fromJson(e),
       )
-
       return datas
     } catch (error) {
       return []
@@ -102,10 +56,85 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function fetchEmployeesCount(): Promise<Array<Employee>> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/data-service/employees')
+      const datas: Array<Employee> = response.data.data.map((e: any) => Employee.fromJson(e))
+      return datas
+    } catch (error) {
+      return []
+    }
+  }
+
+  async function fetchBusinessOperatedDuration(): Promise<Array<BusinessDuration>> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get(
+        'v1/data-service/duration-of-operations',
+      )
+      const datas: Array<BusinessDuration> = response.data.data.map((e: any) =>
+        BusinessDuration.fromJson(e),
+      )
+      return datas
+    } catch (error) {
+      return []
+    }
+  }
+
+  async function fetchRegions(): Promise<Array<Region>> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/data-service/regions')
+      const datas: Array<Region> = response.data.data.map((e: any) => Region.fromJson(e))
+      return datas
+    } catch (error) {
+      return []
+    }
+  }
+
+  async function fetchRegencies(): Promise<Array<Regency>> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/data-service/regencies')
+      const datas: Array<Region> = response.data.data.map((e: any) => Regency.fromJson(e))
+      return datas
+    } catch (error) {
+      return []
+    }
+  }
+
+  async function insertServiceOrder(params: ServiceOrderParams): Promise<void> {
+    try {
+      const response: AxiosResponse = await axiosInstance.post('v1/service-order/store', {
+        name: params.name,
+        phone_number: params.phoneNumber,
+        email: params.email,
+        service_id: params.service_id,
+        collaboration_id: params.collaboration_id,
+        project_detail: params.description,
+        schedule: params.schedule_id,
+        budget_id: params.budget_id,
+        company_name: params.companyName,
+        position: params.position,
+        employee_id: params.employee_id,
+        business_operated: params.business_operated,
+        duration_of_operation_id: params.business_duration_id,
+        region: params.region_id,
+        regency: params.regency_id,
+      })
+
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return {
     fetchServices,
     fetchCollaborations,
     fetchSchedules,
     fetchBudgets,
+    fetchEmployeesCount,
+    fetchBusinessOperatedDuration,
+    fetchRegions,
+    fetchRegencies,
+    insertServiceOrder,
   }
 })
