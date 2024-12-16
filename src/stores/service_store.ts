@@ -30,6 +30,34 @@ export class Collaboration {
   }
 }
 
+export class Schedule {
+  id: string
+  schedule: string
+
+  constructor(id: string, schedule: string) {
+    this.id = id
+    this.schedule = schedule
+  }
+
+  static fromJson(plainJson: any) {
+    return new Schedule(plainJson.id, plainJson.schedule)
+  }
+}
+
+export class Budget {
+  id: string
+  budget: string
+
+  constructor(id: string, budget: string) {
+    this.id = id
+    this.budget = budget
+  }
+
+  static fromJson(plainJson: any) {
+    return new Budget(plainJson.id, plainJson.amount)
+  }
+}
+
 export const useServiceStore = defineStore('service', () => {
   async function fetchServices(): Promise<Array<Service>> {
     try {
@@ -53,8 +81,31 @@ export const useServiceStore = defineStore('service', () => {
       return []
     }
   }
+
+  async function fetchSchedules(): Promise<Array<Schedule>> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/data-service/schedules')
+      const datas: Array<Schedule> = response.data.data.map((e: any) => Schedule.fromJson(e))
+      return datas
+    } catch (error) {
+      return []
+    }
+  }
+
+  async function fetchBudgets(): Promise<Array<Budget>> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/data-service/budgets')
+      const datas: Array<Budget> = response.data.data.map((e: any) => Budget.fromJson(e))
+      return datas
+    } catch (error) {
+      return []
+    }
+  }
+
   return {
     fetchServices,
     fetchCollaborations,
+    fetchSchedules,
+    fetchBudgets,
   }
 })

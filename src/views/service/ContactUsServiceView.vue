@@ -20,7 +20,11 @@ const prevPage = () => --pageIndex.value
 const name: Ref<string> = ref('')
 const phone: Ref<string> = ref('')
 const email: Ref<string> = ref('')
-
+const service: Ref<string> = ref('')
+const collaboration: Ref<string> = ref('')
+const description: Ref<string> = ref('')
+const schedule: Ref<string> = ref('')
+const budget: Ref<string> = ref('')
 
 </script>
 
@@ -39,8 +43,10 @@ const email: Ref<string> = ref('')
       <HeadingSix text="Bagaimana cara kami menghubungi Anda?" />
     </div>
 
-    <FirstForm v-if="pageIndex == 0" @next="(p0, p1, p2) => { name = p0, phone = p1, email = p2; nextPage() }" />
-    <SecondForm v-if="pageIndex == 1" @prev="prevPage" @next="nextPage" />
-    <ThirdForm v-if="pageIndex == 2" @prev="prevPage" @send="() => console.log(name + phone + email)" />
+    <FirstForm v-show="pageIndex == 0" @next="(p0, p1, p2) => { name = p0; phone = p1; email = p2; nextPage(); }" />
+    <SecondForm v-show="pageIndex == 1" @prev="prevPage"
+      @next="(p0, p1, p2, p3, p4) => { service = p0; collaboration = p1; description = p2; schedule = p3; budget = p4; nextPage() }" />
+    <ThirdForm v-show="pageIndex == 2" @prev="prevPage"
+      @send="() => console.log(name + phone + email + service + collaboration + description + schedule + budget)" />
   </div>
 </template>
