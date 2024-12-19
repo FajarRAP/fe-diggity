@@ -1,22 +1,46 @@
 <script setup lang="ts">
+import type { ServiceOrder } from '@/common/models';
 import Arrow from '@/components/breadcumb/Arrow.vue';
 import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import HeadingSix from '@/components/fonts/HeadingSix.vue';
 import HeadingTwo from '@/components/fonts/HeadingTwo.vue';
-import ParagraphExtraSmall from '@/components/fonts/ParagraphExtraSmall.vue';
 import ParagraphSmall from '@/components/fonts/ParagraphSmall.vue';
 import Dashboard from '@/components/icons/Dashboard.vue';
 import Info from '@/components/icons/Info.vue';
 import Search from '@/components/icons/Search.vue';
 import Service from '@/components/icons/Service.vue';
-import { computed, ref, type Ref } from 'vue';
+import { useServiceStore } from '@/stores/service_store';
+import { onMounted, ref, type Ref } from 'vue';
 
+const serviceStore = useServiceStore()
 
 const isSideBarOpened: Ref<boolean> = ref(false)
 const isSecondSideBarOpened: Ref<boolean> = ref(false)
+const serviceOrders: Ref<Array<ServiceOrder>> = ref([])
+const last_page: Ref<number> = ref(-1)
+const page: Ref<number> = ref(1)
 
 const toggleSidebar = () => isSideBarOpened.value = !isSideBarOpened.value
 const toggleSecondSidebar = () => isSecondSideBarOpened.value = !isSecondSideBarOpened.value
+
+async function next() {
+  if (page.value == last_page.value) return;
+  serviceOrders.value = (await serviceStore.fetchServiceOrders(++page.value)).service_orders
+}
+
+async function prev() {
+  if (page.value == 1) return;
+  serviceOrders.value = (await serviceStore.fetchServiceOrders(--page.value)).service_orders
+
+}
+
+onMounted(async () => {
+  const res = await serviceStore.fetchServiceOrders(page.value)
+  serviceOrders.value = res.service_orders
+  last_page.value = res.last_page
+})
+
+console.log(sessionStorage.getItem('token'))
 </script>
 
 <template>
@@ -57,7 +81,7 @@ const toggleSecondSidebar = () => isSecondSideBarOpened.value = !isSecondSideBar
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div
           class="flex flex-wrap items-center justify-between p-1 pb-4 space-y-4 flex-column sm:flex-row sm:space-y-0">
-          <select class="border border-gray-300 rounded-lg bg-gray-50 focus:outline-none" type="button">
+          <select class="border border-gray-300 rounded-lg bg-gray-50 focus:outline-none">
             <option value="">Status</option>
           </select>
           <div class="relative">
@@ -89,7 +113,8 @@ const toggleSecondSidebar = () => isSecondSideBarOpened.value = !isSecondSideBar
             </thead>
             <tbody>
               <tr
-                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                v-for="e in serviceOrders" :key="e.id" @click="console.log(e.id)">
                 <td class="w-4 p-4">
                   <div class="flex items-center">
                     <input id="checkbox-table-search-1" type="checkbox"
@@ -98,16 +123,23 @@ const toggleSecondSidebar = () => isSecondSideBarOpened.value = !isSecondSideBar
                   </div>
                 </td>
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  Apple MacBook Pro 17"
+                  {{ e.name }}
                 </th>
                 <td class="px-6 py-4">
-                  Silver
+                  {{ e.phone_number }}
                 </td>
                 <td class="px-6 py-4">
-                  Laptop
+                  {{ e.email }}
                 </td>
                 <td class="px-6 py-4">
-                  <PrimaryButton class="w-full" text="Diterima" />
+                  <PrimaryButton class="w-full" text="Proses" @click="serviceStore.fetchServiceOrders"
+                    v-if="e.status_id == '1'" />
+                  <PrimaryButton class="w-full" text="Diterima" @click="serviceStore.fetchServiceOrders"
+                    v-if="e.status_id == '2'" />
+                  <PrimaryButton class="w-full" text="Dibatalkan" @click="serviceStore.fetchServiceOrders"
+                    v-if="e.status_id == '3'" />
+                  <PrimaryButton class="w-full" text="Selesai" @click="serviceStore.fetchServiceOrders"
+                    v-if="e.status_id == '4'" />
                 </td>
               </tr>
             </tbody>
@@ -118,12 +150,13 @@ const toggleSecondSidebar = () => isSecondSideBarOpened.value = !isSecondSideBar
         aria-label="Table navigation">
         <span
           class="block w-full mb-4 text-sm font-normal text-gray-500 dark:text-gray-400 md:mb-0 md:inline md:w-auto">Halaman
-          <span class="font-semibold text-gray-900 dark:text-white">1</span> dari <span
-            class="font-semibold text-gray-900 dark:text-white">1000</span></span>
+          <span class="font-semibold text-gray-900 dark:text-white">{{ page }}</span> dari <span
+            class="font-semibold text-gray-900 dark:text-white">{{ last_page }}</span></span>
         <ul class="inline-flex h-8 -space-x-px text-sm rtl:space-x-reverse">
-          <li>
-            <a href="#"
-              class="flex items-center justify-center w-20 h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 ms-0 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+          <li
+            class="flex items-center justify-center w-20 h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 ms-0 rounded-s-lg hover:bg-gray-100 hover:text-gray-700"
+            @click="prev">
+            Previous
           </li>
           <!-- <li>
             <a href="#"
@@ -145,9 +178,10 @@ const toggleSecondSidebar = () => isSecondSideBarOpened.value = !isSecondSideBar
             <a href="#"
               class="flex items-center justify-center h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
           </li> -->
-          <li>
-            <a href="#"
-              class="flex items-center justify-center w-20 h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+          <li
+            class="flex items-center justify-center w-20 h-8 px-3 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700"
+            @click="next">
+            Next
           </li>
         </ul>
       </nav>

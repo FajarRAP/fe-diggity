@@ -8,7 +8,9 @@ import {
   Region,
   Schedule,
   Service,
+  ServiceOrder,
   ServiceOrderParams,
+  ServiceOrderWithLastPage,
 } from '@/common/models'
 import type { AxiosResponse } from 'axios'
 import { defineStore } from 'pinia'
@@ -126,6 +128,23 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function fetchServiceOrders(
+    page: number = 1,
+  ): Promise<{ service_orders: Array<ServiceOrder>; last_page: number }> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/service-order', {
+        params: { page: page },
+      })
+
+      const service_orders = response.data.data.data.map((e: any) => ServiceOrder.fromJson(e))
+      const last_page = response.data.data.last_page
+
+      return { service_orders, last_page }
+    } catch (error) {
+      return { service_orders: [], last_page: -1 }
+    }
+  }
+
   return {
     fetchServices,
     fetchCollaborations,
@@ -136,5 +155,6 @@ export const useServiceStore = defineStore('service', () => {
     fetchRegions,
     fetchRegencies,
     insertServiceOrder,
+    fetchServiceOrders,
   }
 })

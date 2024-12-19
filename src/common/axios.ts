@@ -27,14 +27,18 @@ axiosInstance.interceptors.response.use(
       case 201:
         successToast(response.data.message)
         break
-      case 401:
-        sessionStorage.clear()
     }
     return response
   },
   (error) => {
     if (error instanceof AxiosError) {
-      errorToast(error.response?.data.error)
+      switch (error.response?.status) {
+        case 401:
+          sessionStorage.clear()
+          break
+        default:
+          errorToast(error.response?.data.error ?? error.response?.data.message)
+      }
     }
     return Promise.reject(error)
   },
