@@ -130,10 +130,11 @@ export const useServiceStore = defineStore('service', () => {
 
   async function fetchServiceOrders(
     page: number = 1,
+    name: string,
   ): Promise<{ service_orders: Array<ServiceOrder>; last_page: number }> {
     try {
       const response: AxiosResponse = await axiosInstance.get('v1/service-order', {
-        params: { page: page },
+        params: { page: page, name: name },
       })
 
       const service_orders = response.data.data.data.map((e: any) => ServiceOrder.fromJson(e))
@@ -142,6 +143,31 @@ export const useServiceStore = defineStore('service', () => {
       return { service_orders, last_page }
     } catch (error) {
       return { service_orders: [], last_page: -1 }
+    }
+  }
+
+  async function fetchServiceOrderCount(): Promise<number> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/service-order/sum')
+
+      return response.data.data
+    } catch (error) {
+      return -1
+    }
+  }
+
+  async function fetchVisitorCount(from: string, to: string): Promise<number> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/traffic', {
+        params: {
+          from,
+          to,
+        },
+      })
+
+      return response.data.totalVisitByDate[0].visit_count
+    } catch (error) {
+      return -1
     }
   }
 
@@ -156,5 +182,7 @@ export const useServiceStore = defineStore('service', () => {
     fetchRegencies,
     insertServiceOrder,
     fetchServiceOrders,
+    fetchServiceOrderCount,
+    fetchVisitorCount,
   }
 })
