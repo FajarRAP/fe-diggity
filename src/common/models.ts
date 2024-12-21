@@ -189,7 +189,7 @@ export class ServiceOrder {
   region_id: string
   duration_of_operation_id: string
   regency_id: string
-  status_id: string
+  status_id: number
   created_at: string
   updated_at: string
 
@@ -210,7 +210,7 @@ export class ServiceOrder {
     region_id: string,
     duration_of_operation_id: string,
     regency_id: string,
-    status_id: string,
+    status_id: number,
     created_at: string,
     updated_at: string,
   ) {
