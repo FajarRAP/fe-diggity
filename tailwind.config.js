@@ -16,10 +16,11 @@ export default {
         tertiary: '#0D1A48',
         onPrimary: '#FFFFFF',
         onSecondary: '#FFFFFF',
-        on: '#FFFFFF',
         surface: '#192839',
         accent: '#00BE5F',
         border: '#6C849D',
+        warning: '#FFC107',
+        error: '#F44336'
       },
       fontSize: {
         xxs: ['10px', '12px'],
