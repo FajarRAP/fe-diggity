@@ -7,14 +7,16 @@ import { ref, type Ref } from 'vue';
 import RoutesName from '@/router/routes';
 
 const isSideBarOpened: Ref<boolean> = ref(false)
-
-const toggleSidebar = () => isSideBarOpened.value = !isSideBarOpened.value
+function toggleSidebar() {
+  isSideBarOpened.value = !isSideBarOpened.value
+}
 
 console.log(sessionStorage.getItem('token'))
+
 </script>
 
 <template>
-  <div class="flex h-screen">
+  <div class="flex min-h-screen">
     <div class="flex flex-col bg-inversePrimary xl:px-7 lg:px-5 xl:py-12 lg:py-8 xl:gap-12 lg:gap-8">
       <RouterLink :to="RoutesName.dashboardAdminRoute" active-class=" bg-primary/20 rounded-xl">
         <div class="flex items-center p-2.5 gap-3 router-link-exact-active  hover:cursor-pointer"
@@ -23,7 +25,7 @@ console.log(sessionStorage.getItem('token'))
           <HeadingSix text="Dashboard" v-if="isSideBarOpened" />
         </div>
       </RouterLink>
-      <RouterLink :to="`${RoutesName.dashboardAdminRoute}/service/message`" active-class=" bg-primary/20 rounded-xl">
+      <RouterLink :to="`${RoutesName.dashboardAdminRoute}/service`" active-class="bg-primary/20 rounded-xl">
         <div class="flex items-center gap-3 p-2.5" :class="{ 'justify-center': !isSideBarOpened }">
           <Service />
           <HeadingSix text="Layanan" v-if="isSideBarOpened" />
