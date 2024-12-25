@@ -8,6 +8,7 @@ import SuccessButton from '@/components/buttons/SuccessButton.vue';
 import WarningButton from '@/components/buttons/WarningButton.vue';
 import HeadingTwo from '@/components/fonts/HeadingTwo.vue';
 import Search from '@/components/icons/Search.vue';
+import RoutesName from '@/router/routes';
 import { useServiceStore } from '@/stores/service_store';
 import { onMounted, ref, type Ref } from 'vue';
 
@@ -41,7 +42,7 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-col bg-onPrimary xl:py-12 lg:py-8 xl:px-7 lg:px-5 xl:gap-6 lg:gap-4 grow">
-    <Breadcumb>
+    <Breadcumb :to="RoutesName.dashboardAdminRoute">
       <BreadcumbLink text="Layanan" />
       <BreadcumbLink text="Pesan" />
     </Breadcumb>
@@ -71,7 +72,10 @@ onMounted(async () => {
             </tr>
           </thead>
           <tbody>
-            <tr class="bg-white border-b hover:bg-gray-50" v-for="e in serviceOrders" :key="e.id">
+
+
+            <tr class="bg-white border-b hover:bg-gray-50" v-for="e in serviceOrders" :key="e.id"
+              @click="$router.push({ path: `${RoutesName.messageAdminRoute}/${e.id}` })">
               <td class="w-4 p-4">
                 <div class="flex items-center">
                   <input id="checkbox-table-search-1" type="checkbox"
@@ -79,22 +83,17 @@ onMounted(async () => {
                   <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
                 </div>
               </td>
-              <th class="px-6 py-4 font-medium text-gray-900">
-                {{ e.name }}
-              </th>
+              <th class="px-6 py-4 font-medium text-gray-900">{{ e.name }}</th>
+              <td class="px-6 py-4">{{ e.phone_number }}</td>
+              <td class="px-6 py-4">{{ e.email }}</td>
               <td class="px-6 py-4">
-                {{ e.phone_number }}
-              </td>
-              <td class="px-6 py-4">
-                {{ e.email }}
-              </td>
-              <td class="px-6 py-4">
-                <WarningButton v-if="e.status_id === 1" class="w-full" text="Proses" />
-                <PrimaryButton v-if="e.status_id === 2" class="w-full" text="Diterima" />
-                <ErrorButton v-if="e.status_id === 3" class="w-full" text="Dibatalkan" />
-                <SuccessButton v-if="e.status_id === 4" class="w-full" text="Selesai" />
+                <WarningButton v-if="e.status.id === 1" class="w-full" text="Proses" />
+                <PrimaryButton v-if="e.status.id === 2" class="w-full" text="Diterima" />
+                <ErrorButton v-if="e.status.id === 3" class="w-full" text="Dibatalkan" />
+                <SuccessButton v-if="e.status.id === 4" class="w-full" text="Selesai" />
               </td>
             </tr>
+
           </tbody>
         </table>
       </div>
