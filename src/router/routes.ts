@@ -8,4 +8,7 @@ export default class RoutesName {
   static forgotPasswordRoute: string = '/forgot-password'
   static resetPasswordRoute: string = '/reset-password'
   static dashboardAdminRoute: string = '/dashboard/admin'
+  static messageAdminRoute: string = `${RoutesName.dashboardAdminRoute}/service/message`
+  static portfolioAdminRoute: string = `${RoutesName.dashboardAdminRoute}/service/portfolio`
+  static addPortfolioAdminRoute: string = `${RoutesName.dashboardAdminRoute}/service/portfolio/add`
 }

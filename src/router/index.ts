@@ -1,22 +1,22 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import RoutesName from './routes'
-import ServiceView from '@/views/service/ServiceView.vue'
-import ServiceDetailView from '@/views/service/ServiceDetailView.vue'
-import ServiceTypeView from '@/views/service/ServiceTypeView.vue'
-import SignInView from '@/views/auth/SignInView.vue'
-import SignUpView from '@/views/auth/SignUpView.vue'
-import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue'
-import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
-import DashboardAdminView from '@/views/admin/DashboardAdminView.vue'
-import { useAuthStore } from '@/stores/auth_store'
 import ContactUsService from '@/views/service/ContactUsServiceView.vue'
-import FirstForm from '@/components/contact-us/service/FirstForm.vue'
-import SecondForm from '@/components/contact-us/service/SecondForm.vue'
-import ThirdForm from '@/components/contact-us/service/ThirdForm.vue'
+import DashboardAdminView from '@/views/admin/first-sidebar/FirstSidebarAdminDashboard.vue'
+import DashboardContent from '@/views/admin/content/dashboard/DashboardContent.vue'
+import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue'
+import MessageContent from '@/views/admin/content/service/MessageContent.vue'
+import ResetPasswordView from '@/views/auth/ResetPasswordView.vue'
+import RoutesName from './routes'
 import SecondSidebarDashboard from '@/views/admin/second-sidebar/DashboardSecondSidebar.vue'
 import SecondSidebarService from '@/views/admin/second-sidebar/ServiceSecondSidebar.vue'
-import MessageContent from '@/views/admin/content/service/MessageContent.vue'
-import DashboardContent from '@/views/admin/content/dashboard/DashboardContent.vue'
+import ServiceDetailView from '@/views/service/ServiceDetailView.vue'
+import ServiceTypeView from '@/views/service/ServiceTypeView.vue'
+import ServiceView from '@/views/service/ServiceView.vue'
+import SignInView from '@/views/auth/SignInView.vue'
+import SignUpView from '@/views/auth/SignUpView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth_store'
+import PortfolioContent from '@/views/admin/content/service/PortfolioContent.vue'
+import AddPortfolioContent from '@/views/admin/content/service/AddPortfolioContent.vue'
+import MessageDetailContent from '@/views/admin/content/service/MessageDetailContent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -77,10 +77,23 @@ const router = createRouter({
         {
           path: 'service',
           component: SecondSidebarService,
+          redirect: (_) => `${RoutesName.dashboardAdminRoute}/service/message`,
           children: [
             {
               path: 'message',
               component: MessageContent,
+            },
+            {
+              path: 'message/:id(\\d+)',
+              component: MessageDetailContent,
+            },
+            {
+              path: 'portfolio',
+              component: PortfolioContent,
+            },
+            {
+              path: 'portfolio/add',
+              component: AddPortfolioContent,
             },
           ],
         },
@@ -95,6 +108,7 @@ const router = createRouter({
 
 router.beforeEach((to, _) => {
   const authStore = useAuthStore()
+  authStore.checkIsLoggedIn()
   if (!authStore.isLoggedIn && to.path === RoutesName.dashboardAdminRoute) {
     return { path: RoutesName.signInRoute }
   }
