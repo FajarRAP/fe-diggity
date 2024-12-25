@@ -172,90 +172,274 @@ export class ServiceOrderWithLastPage {
   }
 }
 
+export class Status {
+  id: number
+  status: string
+
+  constructor({ id, status }: { id: number; status: string }) {
+    this.id = id
+    this.status = status
+  }
+
+  static fromJson(json: any): Status {
+    return new Status({ id: json.id, status: json.status })
+  }
+}
+
 export class ServiceOrder {
   id: string
   name: string
   phone_number: string
   email: string
-  service_id: string
-  collaboration_id: string
   project_detail: string
-  schedule_id: string
-  budget_id: string
   company_name: string
   position: string
-  employee_id: string
   business_operated: string
-  region_id: string
-  duration_of_operation_id: string
-  regency_id: string
-  status_id: number
   created_at: string
   updated_at: string
+  region: Region
+  regency: Regency
+  service: Service
+  collaboration: Collaboration
+  schedule: Schedule
+  budget: Budget
+  employee: Employee
+  duration: BusinessDuration
+  status: Status
 
-  constructor(
-    id: string,
-    name: string,
-    phone_number: string,
-    email: string,
-    service_id: string,
-    collaboration_id: string,
-    project_detail: string,
-    schedule_id: string,
-    budget_id: string,
-    company_name: string,
-    position: string,
-    employee_id: string,
-    business_operated: string,
-    region_id: string,
-    duration_of_operation_id: string,
-    regency_id: string,
-    status_id: number,
-    created_at: string,
-    updated_at: string,
-  ) {
+  constructor({
+    id,
+    name,
+    phone_number,
+    email,
+    project_detail,
+    company_name,
+    position,
+    business_operated,
+    created_at,
+    updated_at,
+    region,
+    regency,
+    service,
+    collaboration,
+    schedule,
+    budget,
+    employee,
+    duration,
+    status,
+  }: {
+    id: string
+    name: string
+    phone_number: string
+    email: string
+    project_detail: string
+    company_name: string
+    position: string
+    business_operated: string
+    created_at: string
+    updated_at: string
+    region: Region
+    regency: Regency
+    service: Service
+    collaboration: Collaboration
+    schedule: Schedule
+    budget: Budget
+    employee: Employee
+    duration: BusinessDuration
+    status: Status
+  }) {
     this.id = id
     this.name = name
     this.phone_number = phone_number
     this.email = email
-    this.service_id = service_id
-    this.collaboration_id = collaboration_id
     this.project_detail = project_detail
-    this.schedule_id = schedule_id
-    this.budget_id = budget_id
     this.company_name = company_name
     this.position = position
-    this.employee_id = employee_id
     this.business_operated = business_operated
-    this.region_id = region_id
-    this.duration_of_operation_id = duration_of_operation_id
+    this.created_at = created_at
+    this.updated_at = updated_at
+    this.region = region
+    this.regency = regency
+    this.service = service
+    this.collaboration = collaboration
+    this.schedule = schedule
+    this.budget = budget
+    this.employee = employee
+    this.duration = duration
+    this.status = status
+  }
+
+  static fromJson(plainJson: any) {
+    return new ServiceOrder({
+      id: plainJson.id,
+      name: plainJson.name,
+      phone_number: plainJson.phone_number,
+      email: plainJson.email,
+      project_detail: plainJson.project_detail,
+      company_name: plainJson.company_name,
+      position: plainJson.position,
+      created_at: plainJson.created_at,
+      updated_at: plainJson.updated_at,
+      business_operated: plainJson.business_operated,
+      region: Region.fromJson(plainJson.region),
+      regency: Regency.fromJson(plainJson.regency),
+      service: Service.fromJson(plainJson.service),
+      collaboration: Collaboration.fromJson(plainJson.collaboration),
+      schedule: Schedule.fromJson(plainJson.schedule),
+      budget: Budget.fromJson(plainJson.budget),
+      employee: Employee.fromJson(plainJson.employee),
+      duration: BusinessDuration.fromJson(plainJson.duration_of_operation),
+      status: Status.fromJson(plainJson.status),
+    })
+  }
+}
+
+interface IPortfolio {
+  name: string
+  client_name: string
+  year: string
+  service_id: string
+  regency_id: string
+  link: string
+  technology: Array<string>
+  detail_project: string
+  task: string
+  hero_image: FileList | undefined | null
+  galleries: FileList | undefined | null
+}
+
+export class Portfolio implements IPortfolio {
+  name: string
+  client_name: string
+  year: string
+  service_id: string
+  regency_id: string
+  link: string
+  technology: string[]
+  detail_project: string
+  task: string
+  hero_image: FileList
+  galleries: FileList
+  id?: number
+  created_at?: Date
+  updated_at?: Date
+
+  constructor(
+    name: string,
+    client_name: string,
+    year: string,
+    service_id: string,
+    regency_id: string,
+    link: string,
+    technology: Array<string>,
+    detail_project: string,
+    task: string,
+    hero_image: FileList,
+    galleries: FileList,
+    id?: number,
+    created_at?: Date,
+    updated_at?: Date,
+  ) {
+    this.name = name
+    this.client_name = client_name
+    this.year = year
+    this.service_id = service_id
     this.regency_id = regency_id
-    this.status_id = status_id
+    this.link = link
+    this.technology = technology
+    this.detail_project = detail_project
+    this.task = task
+    this.hero_image = hero_image
+    this.galleries = galleries
+    this.id = id
     this.created_at = created_at
     this.updated_at = updated_at
   }
 
   static fromJson(plainJson: any) {
-    return new ServiceOrder(
-      plainJson.id,
+    return new Portfolio(
       plainJson.name,
-      plainJson.phone_number,
-      plainJson.email,
+      plainJson.client_name,
+      plainJson.year,
       plainJson.service_id,
-      plainJson.collaboration_id,
-      plainJson.project_detail,
-      plainJson.schedule_id,
-      plainJson.budget_id,
-      plainJson.company_name,
-      plainJson.position,
-      plainJson.employee_id,
-      plainJson.business_operated,
-      plainJson.region_id,
-      plainJson.duration_of_operation_id,
       plainJson.regency_id,
-      plainJson.status_id,
+      plainJson.link,
+      plainJson.technology,
+      plainJson.detail_project,
+      plainJson.task,
+      plainJson.hero_image,
+      plainJson.galleries,
+      plainJson.id,
       plainJson.created_at,
       plainJson.updated_at,
     )
+  }
+}
+
+export class PortfolioParams implements IPortfolio {
+  name: string
+  client_name: string
+  year: string
+  service_id: string
+  regency_id: string
+  link: string
+  technology: string[]
+  detail_project: string
+  task: string
+  hero_image: FileList | undefined | null
+  galleries: FileList | undefined | null
+
+  constructor({
+    name,
+    client_name,
+    year,
+    service_id,
+    regency_id,
+    link,
+    technology,
+    detail_project,
+    task,
+    hero_image,
+    galleries,
+  }: {
+    name: string
+    client_name: string
+    year: string
+    service_id: string
+    regency_id: string
+    link: string
+    technology: Array<string>
+    detail_project: string
+    task: string
+    hero_image: FileList | undefined | null
+    galleries: FileList | undefined | null
+  }) {
+    this.name = name
+    this.client_name = client_name
+    this.year = year
+    this.service_id = service_id
+    this.regency_id = regency_id
+    this.link = link
+    this.technology = technology
+    this.detail_project = detail_project
+    this.task = task
+    this.hero_image = hero_image
+    this.galleries = galleries
+  }
+
+  toJson(): object {
+    return {
+      name: this.name,
+      service_id: this.service_id,
+      client_name: this.client_name,
+      regency_id: this.regency_id,
+      link: this.link,
+      year: this.year,
+      technology: this.technology,
+      detail_project: this.detail_project,
+      task: this.task,
+      hero_image: this.hero_image![0],
+      image: this.galleries,
+    }
   }
 }
