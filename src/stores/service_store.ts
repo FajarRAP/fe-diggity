@@ -4,13 +4,14 @@ import {
   BusinessDuration,
   Collaboration,
   Employee,
+  Portfolio,
+  PortfolioParams,
   Regency,
   Region,
   Schedule,
   Service,
   ServiceOrder,
   ServiceOrderParams,
-  ServiceOrderWithLastPage,
 } from '@/common/models'
 import type { AxiosResponse } from 'axios'
 import { defineStore } from 'pinia'
@@ -137,11 +138,12 @@ export const useServiceStore = defineStore('service', () => {
         params: { page: page, name: name },
       })
 
-      const service_orders = response.data.data.data.map((e: any) => ServiceOrder.fromJson(e))
-      const last_page = response.data.data.last_page
+      const service_orders = response.data.data.map((e: any) => ServiceOrder.fromJson(e))
+      const last_page = response.data.meta.total_pages
 
       return { service_orders, last_page }
     } catch (error) {
+      console.log(error)
       return { service_orders: [], last_page: -1 }
     }
   }
@@ -171,6 +173,50 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function insertPortfolio(params: PortfolioParams): Promise<void> {
+    try {
+      const response: AxiosResponse = await axiosInstance.postForm('v1/portofolio', params.toJson())
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function fetchPortfolios({
+    page = 1,
+    name,
+  }: {
+    page: number
+    name: string
+  }): Promise<{ portfolios: Array<Portfolio>; last_page: number }> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get('v1/portofolio', {
+        params: {
+          page,
+          name,
+        },
+      })
+
+      const portfolios = response.data.data.data.map((e: any) => Portfolio.fromJson(e))
+      const last_page = response.data.data.last_page
+
+      return { portfolios, last_page }
+    } catch (error) {
+      return { portfolios: [], last_page: -1 }
+    }
+  }
+
+  async function fetchServiceOrderById({ id }: { id: string }): Promise<ServiceOrder | undefined> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get(`/v1/service-order/${id}`)
+      const service_order = ServiceOrder.fromJson(response.data.data)
+
+      return service_order
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return {
     fetchServices,
     fetchCollaborations,
@@ -184,5 +230,8 @@ export const useServiceStore = defineStore('service', () => {
     fetchServiceOrders,
     fetchServiceOrderCount,
     fetchVisitorCount,
+    insertPortfolio,
+    fetchPortfolios,
+    fetchServiceOrderById,
   }
 })
