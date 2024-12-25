@@ -3,7 +3,6 @@ import { errorToast, successToast } from './helpers'
 
 const axiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
-  timeout: 5000,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
@@ -25,7 +24,9 @@ axiosInstance.interceptors.response.use(
     switch (response.status) {
       case 200:
       case 201:
-        successToast(response.data.message)
+        if (response.config.url?.endsWith('login') || response.config.url?.endsWith('logout')) {
+          successToast(response.data.message)
+        }
         break
     }
     return response
