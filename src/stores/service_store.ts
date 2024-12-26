@@ -5,6 +5,7 @@ import {
   Collaboration,
   Employee,
   Portfolio,
+  PortfolioDetail,
   PortfolioParams,
   Regency,
   Region,
@@ -182,22 +183,22 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
-  async function fetchPortfolios({
+  async function fetchDashboardPortfolios({
     page = 1,
-    name,
+    keyword,
   }: {
     page: number
-    name: string
+    keyword: string
   }): Promise<{ portfolios: Array<Portfolio>; last_page: number }> {
     try {
-      const response: AxiosResponse = await axiosInstance.get('v1/portofolio', {
+      const response: AxiosResponse = await axiosInstance.get('v1/portofolio/list', {
         params: {
           page,
-          name,
+          keyword,
         },
       })
 
-      const portfolios = response.data.data.data.map((e: any) => Portfolio.fromJson(e))
+      const portfolios = response.data.data.map((e: any) => Portfolio.fromJson(e))
       const last_page = response.data.data.last_page
 
       return { portfolios, last_page }
@@ -217,6 +218,21 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function fetchDashboardPortfolioById({
+    id,
+  }: {
+    id: string
+  }): Promise<PortfolioDetail | undefined> {
+    try {
+      const response: AxiosResponse = await axiosInstance.get(`/v1/portofolio/${id}`)
+      const portfolio = PortfolioDetail.fromJson(response.data.data)
+
+      return portfolio
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return {
     fetchServices,
     fetchCollaborations,
@@ -231,7 +247,8 @@ export const useServiceStore = defineStore('service', () => {
     fetchServiceOrderCount,
     fetchVisitorCount,
     insertPortfolio,
-    fetchPortfolios,
+    fetchDashboardPortfolios,
     fetchServiceOrderById,
+    fetchDashboardPortfolioById,
   }
 })
