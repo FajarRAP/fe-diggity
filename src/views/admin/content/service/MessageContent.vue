@@ -72,8 +72,6 @@ onMounted(async () => {
             </tr>
           </thead>
           <tbody>
-
-
             <tr class="bg-white border-b hover:bg-gray-50" v-for="e in serviceOrders" :key="e.id"
               @click="$router.push({ path: `${RoutesName.messageAdminRoute}/${e.id}` })">
               <td class="w-4 p-4">
@@ -93,7 +91,6 @@ onMounted(async () => {
                 <SuccessButton v-if="e.status.id === 4" class="w-full" text="Selesai" />
               </td>
             </tr>
-
           </tbody>
         </table>
       </div>
