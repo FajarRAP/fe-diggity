@@ -17,6 +17,7 @@ import { useAuthStore } from '@/stores/auth_store'
 import PortfolioContent from '@/views/admin/content/service/PortfolioContent.vue'
 import AddPortfolioContent from '@/views/admin/content/service/AddPortfolioContent.vue'
 import MessageDetailContent from '@/views/admin/content/service/MessageDetailContent.vue'
+import PortfolioDetailContent from '@/views/admin/content/service/PortfolioDetailContent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -94,6 +95,10 @@ const router = createRouter({
             {
               path: 'portfolio/add',
               component: AddPortfolioContent,
+            },
+            {
+              path: 'portfolio/:id(\\d+)',
+              component: PortfolioDetailContent,
             },
           ],
         },
