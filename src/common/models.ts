@@ -308,12 +308,45 @@ interface IPortfolio {
   galleries: FileList | undefined | null
 }
 
-export class Portfolio implements IPortfolio {
+export class Portfolio {
+  id: string
+  name: string
+  client_name: string
+  service: string
+
+  constructor({
+    id,
+    name,
+    client_name,
+    service,
+  }: {
+    id: string
+    name: string
+    client_name: string
+    service: string
+  }) {
+    this.id = id
+    this.name = name
+    this.client_name = client_name
+    this.service = service
+  }
+
+  static fromJson(json: any) {
+    return new Portfolio({
+      id: json.id,
+      name: json.name,
+      client_name: json.client_name,
+      service: json.service,
+    })
+  }
+}
+
+export class PortfolioDetail {
   name: string
   client_name: string
   year: string
-  service_id: string
-  regency_id: string
+  service: string
+  regency: string
   link: string
   technology: string[]
   detail_project: string
@@ -328,8 +361,8 @@ export class Portfolio implements IPortfolio {
     name: string,
     client_name: string,
     year: string,
-    service_id: string,
-    regency_id: string,
+    service: string,
+    regency: string,
     link: string,
     technology: Array<string>,
     detail_project: string,
@@ -343,8 +376,8 @@ export class Portfolio implements IPortfolio {
     this.name = name
     this.client_name = client_name
     this.year = year
-    this.service_id = service_id
-    this.regency_id = regency_id
+    this.service = service
+    this.regency = regency
     this.link = link
     this.technology = technology
     this.detail_project = detail_project
@@ -356,22 +389,22 @@ export class Portfolio implements IPortfolio {
     this.updated_at = updated_at
   }
 
-  static fromJson(plainJson: any) {
-    return new Portfolio(
-      plainJson.name,
-      plainJson.client_name,
-      plainJson.year,
-      plainJson.service_id,
-      plainJson.regency_id,
-      plainJson.link,
-      plainJson.technology,
-      plainJson.detail_project,
-      plainJson.task,
-      plainJson.hero_image,
-      plainJson.galleries,
-      plainJson.id,
-      plainJson.created_at,
-      plainJson.updated_at,
+  static fromJson(json: any) {
+    return new PortfolioDetail(
+      json.name,
+      json.client_name,
+      json.year,
+      json.service,
+      json.regency,
+      json.link,
+      json.technology,
+      json.detail_project,
+      json.task,
+      json.hero_image,
+      json.galleries,
+      json.id,
+      json.created_at,
+      json.updated_at,
     )
   }
 }
