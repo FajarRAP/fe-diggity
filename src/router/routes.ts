@@ -11,4 +11,5 @@ export default class RoutesName {
   static messageAdminRoute: string = `${this.dashboardAdminRoute}/service/message`
   static portfolioAdminRoute: string = `${this.dashboardAdminRoute}/service/portfolio`
   static addPortfolioAdminRoute: string = `${this.portfolioAdminRoute}/add`
+  static detailPortfolioAdminRoute: string = `${this.portfolioAdminRoute}/detail`
 }

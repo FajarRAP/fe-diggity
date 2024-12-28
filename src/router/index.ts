@@ -90,15 +90,21 @@ const router = createRouter({
             },
             {
               path: 'portfolio',
-              component: PortfolioContent,
-            },
-            {
-              path: 'portfolio/add',
-              component: AddPortfolioContent,
-            },
-            {
-              path: 'portfolio/:id(\\d+)',
-              component: PortfolioDetailContent,
+              redirect: (_) => `${RoutesName.portfolioAdminRoute}`,
+              children: [
+                {
+                  path: '',
+                  component: PortfolioContent,
+                },
+                {
+                  path: 'add',
+                  component: AddPortfolioContent,
+                },
+                {
+                  path: 'detail/:id(\\d+)',
+                  component: PortfolioDetailContent,
+                },
+              ],
             },
           ],
         },
