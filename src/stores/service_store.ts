@@ -1,4 +1,5 @@
 import axiosInstance from '@/common/axios'
+import { successToast } from '@/common/helpers'
 import {
   Budget,
   BusinessDuration,
@@ -177,7 +178,7 @@ export const useServiceStore = defineStore('service', () => {
   async function insertPortfolio(params: PortfolioParams): Promise<void> {
     try {
       const response: AxiosResponse = await axiosInstance.postForm('v1/portofolio', params.toJson())
-      console.log(response.data)
+      successToast(response.data.message)
     } catch (error) {
       console.log(error)
     }
@@ -199,7 +200,7 @@ export const useServiceStore = defineStore('service', () => {
       })
 
       const portfolios = response.data.data.map((e: any) => Portfolio.fromJson(e))
-      const last_page = response.data.data.last_page
+      const last_page = response.data.meta.last_page
 
       return { portfolios, last_page }
     } catch (error) {
@@ -233,6 +234,15 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function deletePortfolio({ id }: { id: string }): Promise<boolean> {
+    try {
+      await axiosInstance.delete(`v1/portofolio/delete/${id}`)
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+
   return {
     fetchServices,
     fetchCollaborations,
@@ -250,5 +260,6 @@ export const useServiceStore = defineStore('service', () => {
     fetchDashboardPortfolios,
     fetchServiceOrderById,
     fetchDashboardPortfolioById,
+    deletePortfolio,
   }
 })
