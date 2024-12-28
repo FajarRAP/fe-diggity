@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { Portfolio } from '@/common/models';
 import Breadcumb from '@/components/breadcumb/Breadcumb.vue';
 import BreadcumbLink from '@/components/breadcumb/BreadcumbLink.vue';
-import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import HeadingTwo from '@/components/fonts/HeadingTwo.vue';
-import Search from '@/components/icons/Search.vue';
+import PrimaryButton from '@/components/buttons/PrimaryButton.vue';
 import RoutesName from '@/router/routes';
-import { useServiceStore } from '@/stores/service_store';
+import Search from '@/components/icons/Search.vue';
+import type { Portfolio } from '@/common/models';
 import { onMounted, ref, type Ref } from 'vue';
+import { useServiceStore } from '@/stores/service_store';
 
 const serviceStore = useServiceStore()
 
@@ -18,24 +18,23 @@ const name: Ref<string> = ref('')
 
 async function next() {
   if (page.value == last_page.value) return;
-  portfolios.value = (await serviceStore.fetchDashboardPortfolios({ page: ++page.value, keyword: name.value })).portfolios
+  const res = await serviceStore.fetchDashboardPortfolios({ page: ++page.value, keyword: name.value })
+  portfolios.value = res.portfolios
 }
 
 async function prev() {
   if (page.value == 1) return;
-  portfolios.value = (await serviceStore.fetchDashboardPortfolios({ page: --page.value, keyword: name.value })).portfolios
+  const res = await serviceStore.fetchDashboardPortfolios({ page: --page.value, keyword: name.value })
+  portfolios.value = res.portfolios
 }
 
-async function search() {
-  portfolios.value = (await serviceStore.fetchDashboardPortfolios({ page: page.value, keyword: name.value })).portfolios
-}
-
-onMounted(async () => {
+async function fetchPortfolios() {
   const res = await serviceStore.fetchDashboardPortfolios({ page: page.value, keyword: name.value })
   portfolios.value = res.portfolios
-  last_page.value = res.last_page ?? 1
-})
+  last_page.value = res.last_page
+}
 
+onMounted(fetchPortfolios)
 </script>
 
 <template>
@@ -55,7 +54,7 @@ onMounted(async () => {
         <Search />
       </div>
       <input type="text" class="border border-gray-300 rounded-lg ps-12 bg-gray-50" placeholder="Cari" v-model="name"
-        @input="search">
+        @input="fetchPortfolios">
     </div>
     <div>
       <table class="w-full text-sm text-left text-gray-500 shadow-card">
@@ -69,7 +68,7 @@ onMounted(async () => {
         </thead>
         <tbody>
           <tr class="bg-white border-b hover:bg-gray-50" v-for="e in portfolios" :key="e.id"
-            @click="$router.push({ path: `${RoutesName.portfolioAdminRoute}/${e.id}` })">
+            @click="$router.push({ path: `${RoutesName.detailPortfolioAdminRoute}/${e.id}` })">
             <td class="w-4 p-4">
               <div class="flex items-center">
                 <input id="checkbox-table-search-1" type="checkbox"
