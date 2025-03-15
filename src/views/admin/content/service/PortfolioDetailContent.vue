@@ -14,10 +14,11 @@ import HeadingTwo from '@/components/fonts/HeadingTwo.vue';
 import RoutesName from '@/router/routes';
 import { useServiceStore } from '@/stores/service_store';
 import { onMounted, ref, type Ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const serviceStore = useServiceStore()
 const route = useRoute()
+const router = useRouter()
 
 const portfolio: Ref<PortfolioDetail | undefined> = ref()
 const project: Ref<string> = ref('')
@@ -59,6 +60,10 @@ async function onClick() {
   const params = new PortfolioParams({ name: project.value, hero_image: heroImage.value, client_name: client.value, detail_project: project_detail.value, galleries: galleries.value, link: link.value, regency_id: location.value, service_id: service.value, task: responsibility.value, technology: [technology.value], year: year.value })
   console.log(params)
   await serviceStore.insertPortfolio(params)
+}
+
+async function deletePortfolio({ portfolioId }: { portfolioId: string }) {
+  if (await serviceStore.deletePortfolio({ id: portfolioId })) router.back()
 }
 
 onMounted(async () => {
@@ -105,7 +110,7 @@ onMounted(async () => {
           <MultiFileField id="gallery" label="Galeri" @change="addGalleries" />
         </div>
         <div class="flex justify-between">
-          <PrimaryOutlineButton text="Hapus" />
+          <PrimaryOutlineButton text="Hapus" @click="deletePortfolio({ portfolioId: `${$route.params.id}` })" />
           <PrimaryButton text="Simpan" @click="onClick" />
         </div>
       </Card>

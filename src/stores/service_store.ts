@@ -1,5 +1,5 @@
 import axiosInstance from '@/common/axios'
-import { successToast } from '@/common/helpers'
+import { errorToast, successToast } from '@/common/helpers'
 import {
   Budget,
   BusinessDuration,
@@ -131,21 +131,26 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
-  async function fetchServiceOrders(
-    page: number = 1,
-    name: string,
-  ): Promise<{ service_orders: Array<ServiceOrder>; last_page: number }> {
+  async function fetchServiceOrders({
+    page = 1,
+    name,
+    status_id,
+  }: {
+    page: number
+    name: string
+    status_id: string
+  }): Promise<{ service_orders: Array<ServiceOrder>; last_page: number }> {
     try {
       const response: AxiosResponse = await axiosInstance.get('v1/service-order', {
-        params: { page: page, name: name },
+        params: { page, name },
       })
 
-      const service_orders = response.data.data.map((e: any) => ServiceOrder.fromJson(e))
+      const service_orders = response.data.data.map(ServiceOrder.fromJson)
       const last_page = response.data.meta.total_pages
 
       return { service_orders, last_page }
     } catch (error) {
-      console.log(error)
+      errorToast('Failed to fetch service orders')
       return { service_orders: [], last_page: -1 }
     }
   }
@@ -243,6 +248,14 @@ export const useServiceStore = defineStore('service', () => {
     }
   }
 
+  async function updatePortfolio({ params }: { params: PortfolioDetail }): Promise<void> {
+    try {
+      await axiosInstance.post(`v1/portofolio/${params.id}`)
+    } catch (error) {
+      errorToast('Failed to update portfolio')
+    }
+  }
+
   return {
     fetchServices,
     fetchCollaborations,
@@ -261,5 +274,6 @@ export const useServiceStore = defineStore('service', () => {
     fetchServiceOrderById,
     fetchDashboardPortfolioById,
     deletePortfolio,
+    updatePortfolio,
   }
 })
